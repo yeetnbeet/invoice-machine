@@ -15,17 +15,22 @@ def getCustomer(email):
     x = requests.get(url,headers=h)
     return x.json()
 def createDraftOrder(customerid,title,depositYN,price) :
-    d = {"draft_order":{"line_items":[{"title":title+" "+depositYN,"price":str(price),"quantity":2}],"customer":{"id":customerid},"use_customer_default_address":'true'}}
+    d = {"draft_order":{"line_items":[{"title":title+" "+depositYN,"price":str(price),"quantity":1}],"customer":{"id":customerid},"use_customer_default_address":'true'}}
     h = {"X-Shopify-Access-Token":key, "Content-Type":"application/json"}
     x = requests.post(URLforDraft,data=json.dumps(d),headers=h)
     return x
+def getOrder():
+    return
 
 #x = requests.post(URLforDraft,data=json.dumps(d),headers=h)
 #print(x.status_code)
 
 if __name__ == "__main__" :
-    response = getCustomer("philiptester@gmail.com")
+    customerEmail = input("customer Email Please: ")
+    itemDescription = input("Enter Item Description: ")
+    Price = input("Enter Product Price: ")
+    response = getCustomer(customerEmail)
     customerID = response["customers"][0]["id"]
-    res = createDraftOrder(customerID,"OLD SHIRT","DEPOSIT",36.55)
+    res = createDraftOrder(customerID,itemDescription,"DEPOSIT",Price)
     print(res.status_code)
 
