@@ -9,24 +9,15 @@ from googleapiclient import discovery
 load_dotenv()
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials.json"
 
-# If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-
-# The ID and range of a sample spreadsheet.
-SAMPLE_SPREADSHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms'
-SAMPLE_RANGE_NAME = 'Class Data!A2:E'
-
 key = os.getenv("SECRET_TOKEN")
 URLforDraft = "https://"+os.getenv("STORE_NAME")+"/admin/api/2022-10/draft_orders.json"
-idd = 6038008168634
-h = {"X-Shopify-Access-Token":key, "Content-Type":"application/json"}
-d = {"draft_order":{"line_items":[{"title":"Custom Tee","price":"5.00","quantity":2}],"customer":{"id":idd},"use_customer_default_address":'true'}}
+
 
 def getCustomer(email):
     url = "https://"+os.getenv("STORE_NAME")+"/admin/api/2022-10/customers/search.json?query="+email 
     x = requests.get(url,headers=h)
     return x.json()
-    
+
 def createDraftOrder(customerid,title,depositYN,price) :
     d = {"draft_order":{"line_items":[{"title":title+" "+depositYN,"price":str(price),"quantity":1}],"customer":{"id":customerid},"use_customer_default_address":'true'}}
     h = {"X-Shopify-Access-Token":key, "Content-Type":"application/json"}
